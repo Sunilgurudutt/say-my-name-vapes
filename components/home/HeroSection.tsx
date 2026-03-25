@@ -1,9 +1,10 @@
 "use client";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import ShaderBackground from "@/components/ui/shader-background";
 import type { HeroSlide } from "@/types";
 
 const FALLBACK_SLIDES: HeroSlide[] = [
@@ -13,125 +14,6 @@ const FALLBACK_SLIDES: HeroSlide[] = [
   { id: "hero-4", imageUrl: "/images/hero/hero-4.jpg", label: "Pods & Accessories", order: 4 },
   { id: "hero-5", imageUrl: "/images/hero/hero-5.jpg", label: "Flavours & More", order: 5 },
 ];
-
-// ── Particle canvas ───────────────────────────────────────────
-
-interface Particle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  radius: number;
-  opacity: number;
-}
-
-function SmokeCanvas() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animRef = useRef<number>(0);
-  const particlesRef = useRef<Particle[]>([]);
-
-  const initParticles = useCallback((w: number, h: number) => {
-    const count = Math.floor((w * h) / 8000);
-    particlesRef.current = Array.from({ length: count }, () => ({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
-      radius: Math.random() * 2 + 1.5,
-      opacity: Math.random() * 0.6 + 0.3,
-    }));
-  }, []);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const resize = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-      initParticles(canvas.width, canvas.height);
-    };
-    resize();
-
-    const ro = new ResizeObserver(resize);
-    ro.observe(canvas);
-
-    function connect(particles: Particle[]) {
-      if (!ctx) return;
-      const maxDist = 120;
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < maxDist) {
-            const mx = (particles[i].x + particles[j].x) / 2;
-            const my = (particles[i].y + particles[j].y) / 2;
-            const r = dist * 0.55;
-
-            ctx.save();
-            ctx.filter = "blur(6px)";
-            ctx.globalCompositeOperation = "screen";
-
-            const grad = ctx.createRadialGradient(mx, my, 0, mx, my, r);
-            const alpha = (1 - dist / maxDist) * 0.18;
-            grad.addColorStop(0, `rgba(180, 100, 255, ${alpha})`);
-            grad.addColorStop(1, "rgba(180, 100, 255, 0)");
-
-            ctx.beginPath();
-            ctx.arc(mx, my, r, 0, Math.PI * 2);
-            ctx.fillStyle = grad;
-            ctx.fill();
-            ctx.restore();
-          }
-        }
-      }
-    }
-
-    function draw() {
-      if (!canvas || !ctx) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      const particles = particlesRef.current;
-      for (const p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-
-        ctx.save();
-        ctx.globalCompositeOperation = "screen";
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(160, 100, 255, ${p.opacity * 0.9})`;
-        ctx.fill();
-        ctx.restore();
-      }
-
-      connect(particles);
-      animRef.current = requestAnimationFrame(draw);
-    }
-
-    animRef.current = requestAnimationFrame(draw);
-
-    return () => {
-      cancelAnimationFrame(animRef.current);
-      ro.disconnect();
-    };
-  }, [initParticles]);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full"
-      style={{ zIndex: 3 }}
-    />
-  );
-}
-
-// ── Hero section ──────────────────────────────────────────────
 
 export default function HeroSection({ logoUrl }: { logoUrl?: string }) {
   const [slides, setSlides] = useState<HeroSlide[]>(FALLBACK_SLIDES);
@@ -143,21 +25,19 @@ export default function HeroSection({ logoUrl }: { logoUrl?: string }) {
       .then((data: HeroSlide[]) => {
         if (Array.isArray(data) && data.length > 0) setSlides(data);
       })
-      .catch(() => {/* use fallback */});
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
     if (slides.length === 0) return;
-    const interval = setInterval(() => {
-      setCurrent((c) => (c + 1) % slides.length);
-    }, 5000);
-    return () => clearInterval(interval);
+    const id = setInterval(() => setCurrent((c) => (c + 1) % slides.length), 5000);
+    return () => clearInterval(id);
   }, [slides.length]);
 
   return (
     <section className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden pt-16">
 
-      {/* Layer 1: Background slideshow */}
+      {/* Layer 1 — rotating brand images */}
       <AnimatePresence mode="sync">
         <motion.div
           key={slides[current]?.id ?? current}
@@ -181,24 +61,26 @@ export default function HeroSection({ logoUrl }: { logoUrl?: string }) {
         </motion.div>
       </AnimatePresence>
 
-      {/* Layer 2: Dark overlay */}
-      <div className="absolute inset-0 bg-black/40" style={{ zIndex: 2 }} />
+      {/* Layer 2 — dark overlay for readability */}
+      <div className="absolute inset-0 bg-black/50" style={{ zIndex: 2 }} />
 
-      {/* Layer 3: AetherFlow smoke canvas (transparent bg, screen blend) */}
-      <SmokeCanvas />
+      {/* Layer 3 — WebGL shader (transparent bg, screen blend — flowing smoke lines) */}
+      <ShaderBackground
+        className="absolute inset-0 w-full h-full"
+        style={{ zIndex: 3 }}
+      />
 
-      {/* Layer 4: Bottom gradient */}
+      {/* Layer 4 — bottom fade */}
       <div
         className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-black/60 to-transparent"
         style={{ zIndex: 4 }}
       />
 
-      {/* Layer 5: Content */}
+      {/* Layer 5 — content */}
       <div
         className="relative text-center px-4 max-w-4xl mx-auto flex flex-col items-center"
         style={{ zIndex: 5 }}
       >
-
         {/* Logo */}
         {logoUrl && (
           <div className="mb-6 opacity-90">
@@ -211,7 +93,6 @@ export default function HeroSection({ logoUrl }: { logoUrl?: string }) {
           </div>
         )}
 
-        {/* Tagline */}
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -221,7 +102,6 @@ export default function HeroSection({ logoUrl }: { logoUrl?: string }) {
           Premium Vape Store
         </motion.p>
 
-        {/* Store name */}
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -231,6 +111,7 @@ export default function HeroSection({ logoUrl }: { logoUrl?: string }) {
         >
           Say My Name
         </motion.h1>
+
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -241,7 +122,6 @@ export default function HeroSection({ logoUrl }: { logoUrl?: string }) {
           Vapes
         </motion.div>
 
-        {/* Slide label */}
         <AnimatePresence mode="wait">
           <motion.p
             key={current}
@@ -255,7 +135,6 @@ export default function HeroSection({ logoUrl }: { logoUrl?: string }) {
           </motion.p>
         </AnimatePresence>
 
-        {/* Description */}
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -265,7 +144,6 @@ export default function HeroSection({ logoUrl }: { logoUrl?: string }) {
           Curated e-liquids, premium devices, and accessories — all in one place. Come visit us in store.
         </motion.p>
 
-        {/* CTA buttons */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -286,7 +164,6 @@ export default function HeroSection({ logoUrl }: { logoUrl?: string }) {
           </Link>
         </motion.div>
 
-        {/* Trust badges */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
