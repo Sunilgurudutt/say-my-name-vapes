@@ -3,7 +3,6 @@ import Link from "next/link";
 import { isAuthenticated } from "@/lib/auth";
 import { getProducts } from "@/lib/data";
 import { formatPrice } from "@/lib/utils";
-import { CATEGORY_LABELS } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import DeleteProductButton from "@/components/admin/DeleteProductButton";
 
@@ -60,7 +59,7 @@ export default async function AdminProductsPage() {
                       </div>
                     </td>
                     <td className="px-4 py-3 hidden sm:table-cell text-muted-foreground">
-                      {CATEGORY_LABELS[product.category]}
+                      {product.category}
                     </td>
                     <td className="px-4 py-3 font-semibold text-foreground">
                       {formatPrice(product.price)}

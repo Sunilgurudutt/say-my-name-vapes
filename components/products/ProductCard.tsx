@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { cn, formatPrice } from "@/lib/utils";
-import { CATEGORY_LABELS } from "@/types";
 import type { Product } from "@/types";
 
 const PLACEHOLDER: Record<string, string> = {
@@ -44,7 +43,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
         {/* Category badge */}
         <div className="absolute top-3 left-3">
           <Badge className="text-xs font-semibold tracking-wider uppercase bg-white border border-[#e5e4e2] text-violet-600 shadow-sm">
-            {CATEGORY_LABELS[product.category]}
+            {product.category}
           </Badge>
         </div>
 
