@@ -35,6 +35,30 @@ export default function ProductForm({ product, isNew = false }: ProductFormProps
       .catch(() => {});
   }, []);
 
+  const [importUrl, setImportUrl] = useState("");
+  const [importing, setImporting] = useState(false);
+
+  async function importFromUrl() {
+    if (!importUrl.trim()) return;
+    setImporting(true);
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: importUrl.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Import failed");
+      set("imageUrl", data.url);
+      setImportUrl("");
+      toast.success("Image imported.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Import failed.");
+    } finally {
+      setImporting(false);
+    }
+  }
+
   const [form, setForm] = useState({
     name: product?.name ?? "",
     description: product?.description ?? "",
@@ -217,11 +241,32 @@ export default function ProductForm({ product, isNew = false }: ProductFormProps
             if (file) uploadImage(file);
           }}
         />
-        {/* Or paste URL */}
+        {/* Import from URL */}
+        <div className="flex gap-2">
+          <Input
+            value={importUrl}
+            onChange={(e) => setImportUrl(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), importFromUrl())}
+            placeholder="Paste image URL to import (saves to storage)"
+            className="text-xs flex-1"
+            disabled={importing}
+          />
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={importFromUrl}
+            disabled={importing || !importUrl.trim()}
+            className="shrink-0 text-xs"
+          >
+            {importing ? "Importing…" : "Import"}
+          </Button>
+        </div>
+        {/* Or use URL directly */}
         <Input
           value={form.imageUrl}
           onChange={(e) => set("imageUrl", e.target.value)}
-          placeholder="Or paste image URL directly"
+          placeholder="Or paste final image URL directly (no import)"
           className="text-xs"
         />
       </div>
