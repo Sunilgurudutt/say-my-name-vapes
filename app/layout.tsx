@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -50,7 +51,9 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground" suppressHydrationWarning>
         <AgeGate logoUrl={logoUrl} />
         <CursorSpotlight />
-        <Navbar logoUrl={logoUrl} />
+        <Suspense fallback={null}>
+          <Navbar logoUrl={logoUrl} />
+        </Suspense>
         <main className="flex-1">{children}</main>
         <Footer logoUrl={logoUrl} />
         <Toaster richColors position="top-right" />

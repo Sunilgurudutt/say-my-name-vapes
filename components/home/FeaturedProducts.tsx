@@ -1,4 +1,5 @@
 "use client";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
@@ -71,7 +72,7 @@ function FeaturedProductCard({ product, index }: { product: Product; index: numb
           <div className="flex items-center gap-1.5 mb-2">
             <div className="w-1 h-3.5 rounded-full bg-violet-400" />
             <span className="text-violet-500 text-[9px] tracking-[0.25em] uppercase font-bold">
-              {product.category === "lab-series" ? "E-Liquid" : product.category === "gear-lab" ? "Device" : "Accessory"}
+              {product.brand || product.category}
             </span>
           </div>
           <h3 className="text-[#1c1c1e] text-sm font-semibold leading-snug mb-3 group-hover:text-violet-700 transition-colors line-clamp-2">
@@ -87,6 +88,19 @@ function FeaturedProductCard({ product, index }: { product: Product; index: numb
 }
 
 export default function FeaturedProducts({ products }: { products: Product[] }) {
+  const [search, setSearch] = useState("");
+
+  const filtered = useMemo(() => {
+    if (!search.trim()) return products;
+    const q = search.toLowerCase();
+    return products.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        (p.description ?? "").toLowerCase().includes(q) ||
+        (p.brand ?? "").toLowerCase().includes(q)
+    );
+  }, [products, search]);
+
   if (products.length === 0) return null;
 
   return (
@@ -96,7 +110,7 @@ export default function FeaturedProducts({ products }: { products: Product[] }) 
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
-        className="mb-10"
+        className="mb-8"
       >
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 pb-6">
           <div>
@@ -110,11 +124,42 @@ export default function FeaturedProducts({ products }: { products: Product[] }) 
         <div className="brand-rule" />
       </motion.div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        {products.map((product, i) => (
-          <FeaturedProductCard key={product.id} product={product} index={i} />
-        ))}
+      {/* Search bar */}
+      <div className="relative mb-6">
+        <svg
+          className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+          fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"
+        >
+          <circle cx="11" cy="11" r="8" /><path strokeLinecap="round" d="M21 21l-4.35-4.35" />
+        </svg>
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search featured products..."
+          className="w-full h-10 pl-10 pr-4 text-sm rounded-xl border border-[#e5e4e2] bg-white text-[#1c1c1e] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent transition"
+        />
+        {search && (
+          <button
+            onClick={() => setSearch("")}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        )}
       </div>
+
+      {filtered.length === 0 ? (
+        <p className="text-gray-400 text-sm text-center py-10">No featured products match &ldquo;{search}&rdquo;</p>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          {filtered.map((product, i) => (
+            <FeaturedProductCard key={product.id} product={product} index={i} />
+          ))}
+        </div>
+      )}
     </section>
   );
 }

@@ -40,6 +40,7 @@ export default function ProductForm({ product, isNew = false }: ProductFormProps
     description: product?.description ?? "",
     price: product ? (product.price / 100).toFixed(2) : "",
     category: product?.category ?? "",
+    brand: product?.brand ?? "",
     imageUrl: product?.imageUrl ?? "",
     inStock: product?.inStock ?? true,
     featured: product?.featured ?? false,
@@ -164,6 +165,17 @@ export default function ProductForm({ product, isNew = false }: ProductFormProps
             </SelectContent>
           </Select>
         </div>
+      </div>
+
+      {/* Brand */}
+      <div className="space-y-2">
+        <Label htmlFor="brand">Brand</Label>
+        <Input
+          id="brand"
+          value={form.brand}
+          onChange={(e) => set("brand", e.target.value)}
+          placeholder="e.g. Elfbar, Flavour Beast, Level X, Zpods"
+        />
       </div>
 
       {/* Image upload */}

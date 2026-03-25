@@ -8,18 +8,19 @@ export default function AgeGate({ logoUrl }: { logoUrl: string }) {
   const [denied, setDenied] = useState(false);
 
   useEffect(() => {
+    let verified = false;
     try {
-      const verified = localStorage.getItem(STORAGE_KEY);
-      if (!verified) setVisible(true);
+      verified = !!sessionStorage.getItem(STORAGE_KEY);
     } catch {
-      // localStorage blocked (private mode, etc.) — skip gate
+      // sessionStorage unavailable (private mode, etc.) — show gate anyway
     }
+    if (!verified) setVisible(true);
   }, []);
 
   function handleConfirm() {
     try {
-      localStorage.setItem(STORAGE_KEY, "1");
-    } catch { /* ok */ }
+      sessionStorage.setItem(STORAGE_KEY, "1");
+    } catch { /* ok — gate won't persist but user can still enter */ }
     setVisible(false);
   }
 
@@ -31,11 +32,11 @@ export default function AgeGate({ logoUrl }: { logoUrl: string }) {
 
   return (
     <div
-      className="fixed inset-0 z-[9998] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[9998] flex items-center justify-center px-4"
       style={{ background: "rgba(5, 5, 15, 0.92)", backdropFilter: "blur(12px)" }}
     >
       <div
-        className="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-8 flex flex-col items-center text-center"
+        className="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-8 flex flex-col items-center text-center"
         style={{ boxShadow: "0 32px 80px rgba(0,0,0,0.5)" }}
       >
         {/* Logo */}

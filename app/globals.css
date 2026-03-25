@@ -172,6 +172,15 @@
     border-color: #c4b5fd;
   }
 
+  /* Hide scrollbar for filter chip rows */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Brand accent divider */
   .brand-rule {
     height: 2px;

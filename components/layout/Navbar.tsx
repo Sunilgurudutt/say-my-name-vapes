@@ -1,16 +1,16 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/discover", label: "Products" },
-  { href: "/lab-series", label: "E-Liquids" },
-  { href: "/gear", label: "Devices" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
+  { href: "/", label: "Home", exact: true },
+  { href: "/discover?category=disposables", label: "Disposables", exact: false },
+  { href: "/discover?category=e-liquid", label: "E-Liquid", exact: false },
+  { href: "/discover", label: "All Products", exact: false },
+  { href: "/about", label: "About", exact: true },
+  { href: "/contact", label: "Contact", exact: true },
 ];
 
 function LogoArea({ logoUrl }: { logoUrl: string }) {
@@ -36,8 +36,21 @@ function LogoArea({ logoUrl }: { logoUrl: string }) {
   );
 }
 
+function isLinkActive(pathname: string, searchParams: ReturnType<typeof useSearchParams>, link: { href: string; exact: boolean }) {
+  const [linkPath, linkQuery] = link.href.split("?");
+  if (pathname !== linkPath) return false;
+  if (!linkQuery) {
+    // "All Products" (/discover with no category) is active only when on /discover with no category param
+    if (linkPath === "/discover") return !searchParams.get("category");
+    return link.exact ? true : true;
+  }
+  const linkParams = new URLSearchParams(linkQuery);
+  return searchParams.get("category") === linkParams.get("category");
+}
+
 export default function Navbar({ logoUrl }: { logoUrl: string }) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -72,7 +85,7 @@ export default function Navbar({ logoUrl }: { logoUrl: string }) {
                   className={cn(
                     "text-sm font-medium transition-colors duration-200 relative py-1",
                     "after:absolute after:bottom-0 after:left-0 after:h-0.5 after:rounded-full after:bg-violet-500 after:transition-all after:duration-200",
-                    pathname === link.href
+                    isLinkActive(pathname, searchParams, link)
                       ? "text-violet-600 after:w-full"
                       : "text-gray-600 hover:text-[#1c1c1e] after:w-0 hover:after:w-full"
                   )}
@@ -112,7 +125,7 @@ export default function Navbar({ logoUrl }: { logoUrl: string }) {
                 href={link.href}
                 className={cn(
                   "block px-3 py-2.5 text-sm font-medium rounded-lg transition-all",
-                  pathname === link.href
+                  isLinkActive(pathname, searchParams, link)
                     ? "text-violet-600 bg-violet-50"
                     : "text-gray-600 hover:text-[#1c1c1e] hover:bg-gray-50"
                 )}

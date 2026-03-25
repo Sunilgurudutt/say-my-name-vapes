@@ -1,47 +1,37 @@
 "use client";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import type { ProductCategory } from "@/types";
 
-const CATEGORIES: {
-  category: ProductCategory;
-  href: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  color: string;
-  bg: string;
-  icon: React.ReactNode;
-}[] = [
+const CATEGORIES = [
   {
-    category: "lab-series",
-    href: "/lab-series",
-    title: "E-Liquids",
-    subtitle: "Flavours & Salts",
-    description: "Wide range of e-liquids for every taste — freebase, nic salts, shortfills.",
+    id: "disposables",
+    href: "/discover?category=disposables",
+    title: "Disposables",
+    subtitle: "Ready to Vape",
+    description: "Single-use devices pre-filled with e-liquid — grab and go, no setup needed. Top brands stocked.",
     color: "#7c3aed",
     bg: "#ede9fe",
+    icon: <DisposableIcon />,
+  },
+  {
+    id: "e-liquid",
+    href: "/discover?category=e-liquid",
+    title: "E-Liquid",
+    subtitle: "Flavours & Salts",
+    description: "Wide range of e-liquids for every taste — freebase, nic salts, and premium blends.",
+    color: "#0891b2",
+    bg: "#cffafe",
     icon: <ELiquidIcon />,
   },
   {
-    category: "gear-lab",
-    href: "/gear",
-    title: "Devices",
-    subtitle: "Mods, Pods & Kits",
-    description: "From beginner starter kits to advanced mods — all top brands stocked.",
-    color: "#0891b2",
-    bg: "#cffafe",
-    icon: <DeviceIcon />,
-  },
-  {
-    category: "component-lab",
-    href: "/discover?category=component-lab",
-    title: "Accessories",
-    subtitle: "Coils, Tanks & More",
-    description: "Replacement coils, tanks, batteries, and everything you need.",
-    color: "#b45309",
-    bg: "#fef3c7",
-    icon: <AccessoryIcon />,
+    id: "pods",
+    href: "/discover?category=pods",
+    title: "Pods",
+    subtitle: "Pre-filled & Refillable",
+    description: "Compatible pod cartridges for all major devices — Zpods, Level X, Flavour Beast and more.",
+    color: "#059669",
+    bg: "#d1fae5",
+    icon: <PodIcon />,
   },
 ];
 
@@ -70,7 +60,7 @@ export default function CategoryCards() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {CATEGORIES.map((cat, i) => (
             <motion.div
-              key={cat.category}
+              key={cat.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
@@ -122,6 +112,18 @@ export default function CategoryCards() {
 
 /* ─── Icons ──────────────────────────────────────────────────── */
 
+function DisposableIcon() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="9" y="6" width="10" height="18" rx="3" />
+      <path d="M12 6V4a2 2 0 0 1 4 0v2" />
+      <path d="M14 10v5" />
+      <circle cx="14" cy="18" r="1.5" fill="currentColor" fillOpacity="0.4" stroke="none" />
+      <path d="M14 6c0 0 3-3 3-5" strokeOpacity="0.4" strokeWidth="1.2" />
+    </svg>
+  );
+}
+
 function ELiquidIcon() {
   return (
     <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -132,25 +134,14 @@ function ELiquidIcon() {
   );
 }
 
-function DeviceIcon() {
+function PodIcon() {
   return (
     <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="9" y="2" width="10" height="24" rx="3" />
-      <path d="M12 6h4" />
-      <path d="M12 10h4" />
-      <circle cx="14" cy="18" r="2.5" />
-      <path d="M11 2V1" />
-      <path d="M17 2V1" />
-    </svg>
-  );
-}
-
-function AccessoryIcon() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="14" cy="14" r="5" />
-      <path d="M14 2v3M14 23v3M2 14h3M23 14h3" />
-      <path d="M5.64 5.64l2.12 2.12M20.24 20.24l2.12 2.12M20.24 5.64l-2.12 2.12M5.64 20.24l2.12 2.12" />
+      <rect x="8" y="8" width="12" height="16" rx="4" />
+      <path d="M11 8V6a3 3 0 0 1 6 0v2" />
+      <path d="M11 14h6" />
+      <path d="M11 17h4" />
+      <circle cx="18" cy="17" r="1.2" fill="currentColor" fillOpacity="0.5" stroke="none" />
     </svg>
   );
 }

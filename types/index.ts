@@ -12,6 +12,7 @@ export interface Product {
   description: string;
   price: number; // in cents, e.g. 2499 = $24.99
   category: ProductCategory;
+  brand?: string;
   imageUrl: string;
   inStock: boolean;
   featured: boolean;
