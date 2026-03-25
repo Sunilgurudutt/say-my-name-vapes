@@ -17,7 +17,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <HeroSection logoUrl={store.logoUrl || "/images/logo.svg"} />
+      <HeroSection />
       <CategoryCards />
       <OffersStrip offers={activeOffers} />
       <ReviewsStrip />

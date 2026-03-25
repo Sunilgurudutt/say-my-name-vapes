@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import ShaderBackground from "@/components/ui/shader-background";
 import type { HeroSlide } from "@/types";
 
 const FALLBACK_SLIDES: HeroSlide[] = [
@@ -15,7 +14,7 @@ const FALLBACK_SLIDES: HeroSlide[] = [
   { id: "hero-5", imageUrl: "/images/hero/hero-5.jpg", label: "Flavours & More", order: 5 },
 ];
 
-export default function HeroSection({ logoUrl }: { logoUrl?: string }) {
+export default function HeroSection() {
   const [slides, setSlides] = useState<HeroSlide[]>(FALLBACK_SLIDES);
   const [current, setCurrent] = useState(0);
 
@@ -62,13 +61,7 @@ export default function HeroSection({ logoUrl }: { logoUrl?: string }) {
       </AnimatePresence>
 
       {/* Layer 2 — dark overlay for readability */}
-      <div className="absolute inset-0 bg-black/50" style={{ zIndex: 2 }} />
-
-      {/* Layer 3 — WebGL shader (transparent bg, screen blend — flowing smoke lines) */}
-      <ShaderBackground
-        className="absolute inset-0 w-full h-full"
-        style={{ zIndex: 3 }}
-      />
+      <div className="absolute inset-0 bg-black/65" style={{ zIndex: 2 }} />
 
       {/* Layer 4 — bottom fade */}
       <div
@@ -81,18 +74,6 @@ export default function HeroSection({ logoUrl }: { logoUrl?: string }) {
         className="relative text-center px-4 max-w-4xl mx-auto flex flex-col items-center"
         style={{ zIndex: 5 }}
       >
-        {/* Logo */}
-        {logoUrl && (
-          <div className="mb-6 opacity-90">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={logoUrl}
-              alt="Say My Name Vapes"
-              className="w-20 h-20 sm:w-24 sm:h-24 object-contain mx-auto drop-shadow-lg"
-            />
-          </div>
-        )}
-
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -107,7 +88,7 @@ export default function HeroSection({ logoUrl }: { logoUrl?: string }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
           className="text-white font-bold leading-none mb-3"
-          style={{ fontSize: "clamp(2.8rem, 8vw, 6rem)" }}
+          style={{ fontSize: "clamp(2.8rem, 8vw, 6rem)", textShadow: "0 2px 24px rgba(0,0,0,0.9), 0 1px 6px rgba(0,0,0,1)" }}
         >
           Say My Name
         </motion.h1>
@@ -117,7 +98,7 @@ export default function HeroSection({ logoUrl }: { logoUrl?: string }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3 }}
           className="text-violet-400 font-bold leading-none mb-6"
-          style={{ fontSize: "clamp(2.4rem, 7vw, 5.2rem)" }}
+          style={{ fontSize: "clamp(2.4rem, 7vw, 5.2rem)", textShadow: "0 2px 24px rgba(0,0,0,0.9), 0 1px 6px rgba(0,0,0,1)" }}
         >
           Vapes
         </motion.div>

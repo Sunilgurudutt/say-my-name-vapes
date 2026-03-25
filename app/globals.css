@@ -218,7 +218,8 @@
     font-size: 16px;
     font-weight: 400;
   }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body { overflow-x: hidden; }
 
   ::selection {
     background: rgba(139, 92, 246, 0.2);

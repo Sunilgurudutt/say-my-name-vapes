@@ -7,6 +7,7 @@ import Footer from "@/components/layout/Footer";
 import { Toaster } from "@/components/ui/sonner";
 import CursorSpotlight from "@/components/ui/CursorSpotlight";
 import AgeGate from "@/components/ui/AgeGate";
+import GlobalShaderBackground from "@/components/ui/GlobalShaderBackground";
 import { getStoreInfo } from "@/lib/data";
 
 const inter = Inter({
@@ -49,6 +50,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground" suppressHydrationWarning>
+        <GlobalShaderBackground />
         <AgeGate logoUrl={logoUrl} />
         <CursorSpotlight />
         <Suspense fallback={null}>
