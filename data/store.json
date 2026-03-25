@@ -1,0 +1,54 @@
+{
+  "name": "Say My Name Vapes",
+  "tagline": "Premium vaping — e-liquids, devices, and accessories.",
+  "address": "Inside Mavis KFF Convenience, 735 Twain Ave Unit #3",
+  "suburb": "Mississauga",
+  "state": "ON",
+  "postcode": "L5W 1X1",
+  "phone": "(905) 956-9366",
+  "email": "",
+  "hours": {
+    "monday": {
+      "open": "8:00 AM",
+      "close": "10:30 PM",
+      "closed": false
+    },
+    "tuesday": {
+      "open": "8:00 AM",
+      "close": "10:30 PM",
+      "closed": false
+    },
+    "wednesday": {
+      "open": "8:00 AM",
+      "close": "10:30 PM",
+      "closed": false
+    },
+    "thursday": {
+      "open": "8:00 AM",
+      "close": "10:30 PM",
+      "closed": false
+    },
+    "friday": {
+      "open": "8:00 AM",
+      "close": "11:00 PM",
+      "closed": false
+    },
+    "saturday": {
+      "open": "8:00 AM",
+      "close": "11:00 PM",
+      "closed": false
+    },
+    "sunday": {
+      "open": "8:00 AM",
+      "close": "10:30 PM",
+      "closed": false
+    }
+  },
+  "socialLinks": {
+    "facebook": "",
+    "instagram": "",
+    "youtube": ""
+  },
+  "mapEmbedUrl": "https://maps.google.com/maps?q=735+Twain+Ave+Unit+3+Mississauga+ON+L5W+1X1&output=embed&z=15",
+  "logoUrl": "/uploads/1774421050393-Gemini_Generated_Image_g1giiog1giiog1gi.png"
+}
