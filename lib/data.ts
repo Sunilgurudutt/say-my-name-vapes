@@ -4,7 +4,7 @@
  * and the Redis client will be used instead.
  */
 import { Redis } from "@upstash/redis";
-import type { Product, Offer, StoreInfo, Review } from "@/types";
+import type { Product, Offer, StoreInfo, Review, Category } from "@/types";
 import { seedProducts, seedOffers, seedStoreInfo, seedReviews } from "./seeds";
 
 // ── Client ────────────────────────────────────────────────────
@@ -162,6 +162,30 @@ export async function deleteReview(id: string): Promise<void> {
     "reviews",
     reviews.filter((r) => r.id !== id)
   );
+}
+
+// ── Categories ────────────────────────────────────────────────
+const defaultCategories: Category[] = [
+  { id: "disposables",     label: "Disposables",     slug: "disposables" },
+  { id: "e-liquid",        label: "E-Liquid",        slug: "e-liquid" },
+  { id: "pods",            label: "Pods",            slug: "pods" },
+  { id: "battery-devices", label: "Battery Devices", slug: "battery-devices" },
+  { id: "refillable-pods", label: "Refillable Pods", slug: "refillable-pods" },
+];
+
+export async function getCategories(): Promise<Category[]> {
+  return kvGet<Category[]>("categories", defaultCategories);
+}
+
+export async function createCategory(category: Category): Promise<void> {
+  const categories = await getCategories();
+  categories.push(category);
+  await kvSet("categories", categories);
+}
+
+export async function deleteCategory(id: string): Promise<void> {
+  const categories = await getCategories();
+  await kvSet("categories", categories.filter((c) => c.id !== id));
 }
 
 // ── Store Info ────────────────────────────────────────────────

@@ -1,21 +1,23 @@
 "use client";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
-import type { ProductCategory } from "@/types";
-
-const ALL_FILTERS: { value: ProductCategory | "all"; label: string }[] = [
-  { value: "all", label: "All Products" },
-  { value: "lab-series", label: "E-Liquids" },
-  { value: "gear-lab", label: "Devices" },
-  { value: "component-lab", label: "Accessories" },
-];
+import type { Category } from "@/types";
 
 export default function CategoryFilter() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const active = (searchParams.get("category") ?? "all") as ProductCategory | "all";
+  const active = searchParams.get("category") ?? "all";
+  const [categories, setCategories] = useState<Category[]>([]);
 
-  function setFilter(value: ProductCategory | "all") {
+  useEffect(() => {
+    fetch("/api/categories")
+      .then((r) => r.json())
+      .then((data: Category[]) => setCategories(data))
+      .catch(() => {});
+  }, []);
+
+  function setFilter(value: string) {
     const params = new URLSearchParams(searchParams.toString());
     if (value === "all") {
       params.delete("category");
@@ -25,9 +27,14 @@ export default function CategoryFilter() {
     router.push(`?${params.toString()}`, { scroll: false });
   }
 
+  const allFilters = [
+    { value: "all", label: "All Products" },
+    ...categories.map((c) => ({ value: c.slug, label: c.label })),
+  ];
+
   return (
     <div className="flex flex-wrap gap-2">
-      {ALL_FILTERS.map((f) => (
+      {allFilters.map((f) => (
         <button
           key={f.value}
           onClick={() => setFilter(f.value)}

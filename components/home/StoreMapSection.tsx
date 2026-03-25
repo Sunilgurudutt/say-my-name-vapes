@@ -1,3 +1,5 @@
+"use client";
+import { motion } from "framer-motion";
 import type { StoreInfo } from "@/types";
 import { DAYS_OF_WEEK } from "@/types";
 
@@ -13,7 +15,13 @@ export default function StoreMapSection({ store }: { store: StoreInfo }) {
       <div className="max-w-7xl mx-auto">
 
         {/* Section header */}
-        <div className="text-center mb-12">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          viewport={{ once: true, margin: "-80px" }}
+          className="text-center mb-12"
+        >
           <p className="text-violet-500 tracking-[0.25em] uppercase text-xs font-semibold mb-3">
             Visit Us
           </p>
@@ -24,9 +32,15 @@ export default function StoreMapSection({ store }: { store: StoreInfo }) {
             Come visit us in-store — we&apos;d love to help you find the right product.
           </p>
           <div className="brand-rule mt-6 max-w-xs mx-auto" />
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
+          viewport={{ once: true, margin: "-80px" }}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch"
+        >
 
           {/* Map embed */}
           <div className="relative rounded-2xl overflow-hidden aspect-video lg:aspect-auto border border-[#e5e4e2] shadow-sm min-h-[320px]">
@@ -138,7 +152,7 @@ export default function StoreMapSection({ store }: { store: StoreInfo }) {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

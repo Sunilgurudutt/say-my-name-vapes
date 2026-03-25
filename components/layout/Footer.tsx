@@ -9,8 +9,8 @@ export default function Footer({ logoUrl }: { logoUrl: string }) {
 
           {/* Brand */}
           <div className="md:col-span-1">
-            <Link href="/" className="flex items-center gap-2.5 mb-5 w-fit group">
-              <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0">
+            <Link href="/" className="flex flex-col items-start mb-5 w-fit group gap-3">
+              <div className="w-20 h-20 rounded-2xl overflow-hidden shrink-0 bg-white/5 p-1">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={logoUrl}
@@ -19,8 +19,8 @@ export default function Footer({ logoUrl }: { logoUrl: string }) {
                 />
               </div>
               <div className="leading-none">
-                <span className="block text-white font-semibold text-sm group-hover:text-violet-300 transition-colors">Say My Name</span>
-                <span className="block text-violet-400 text-[10px] tracking-widest uppercase">Vapes</span>
+                <span className="block text-white font-bold text-base group-hover:text-violet-300 transition-colors">Say My Name</span>
+                <span className="block text-violet-400 text-xs tracking-widest uppercase mt-0.5">Vapes</span>
               </div>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed mb-5">

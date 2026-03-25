@@ -13,9 +13,14 @@ export default async function HomePage() {
     getStoreInfo(),
   ]);
 
+  const heroProduct = featured.find((p) => p.imageUrl && !p.imageUrl.endsWith(".svg")) ?? null;
+
   return (
     <>
-      <HeroSection />
+      <HeroSection
+        heroProduct={heroProduct ? { name: heroProduct.name, imageUrl: heroProduct.imageUrl } : undefined}
+        logoUrl={store.logoUrl || "/images/logo.svg"}
+      />
       <CategoryCards />
       <ReviewsStrip />
       <FeaturedProducts products={featured} />

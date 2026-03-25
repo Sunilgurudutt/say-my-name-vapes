@@ -1,4 +1,10 @@
-export type ProductCategory = "lab-series" | "gear-lab" | "component-lab";
+export type ProductCategory = string;
+
+export interface Category {
+  id: string;
+  label: string;
+  slug: string;
+}
 
 export interface Product {
   id: string;
@@ -59,18 +65,6 @@ export interface StoreInfo {
   mapEmbedUrl: string;
   logoUrl?: string;
 }
-
-export const CATEGORY_LABELS: Record<ProductCategory, string> = {
-  "lab-series": "Lab Series",
-  "gear-lab": "Gear Lab",
-  "component-lab": "Component Lab",
-};
-
-export const CATEGORY_DESCRIPTIONS: Record<ProductCategory, string> = {
-  "lab-series": "Artisanal E-Liquids",
-  "gear-lab": "Advanced Devices",
-  "component-lab": "Essentials & Mods",
-};
 
 export const DAYS_OF_WEEK = [
   "monday",

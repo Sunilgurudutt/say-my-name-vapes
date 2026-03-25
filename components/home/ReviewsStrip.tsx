@@ -1,5 +1,6 @@
 import { getActiveReviews } from "@/lib/data";
 import type { Review } from "@/types";
+import AnimatedSection from "@/components/ui/AnimatedSection";
 
 function StarRating({ count }: { count: number }) {
   return (
@@ -31,14 +32,14 @@ export default async function ReviewsStrip() {
 
   return (
     <section className="py-16 overflow-hidden bg-[#f8f7f5]">
-      <div className="max-w-6xl mx-auto px-4 mb-10">
+      <AnimatedSection className="max-w-6xl mx-auto px-4 mb-10">
         <p className="text-violet-500 text-xs font-semibold tracking-[0.25em] uppercase mb-2">
           Customer Reviews
         </p>
         <h2 className="font-display text-[#1c1c1e] text-4xl sm:text-5xl">
           What People Say
         </h2>
-      </div>
+      </AnimatedSection>
 
       {/* Scrolling track */}
       <div className="relative">

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { toast } from "sonner";
@@ -14,30 +14,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { Product, ProductCategory } from "@/types";
+import type { Product, Category } from "@/types";
 
 interface ProductFormProps {
   product?: Product;
   isNew?: boolean;
 }
 
-const CATEGORIES: { value: ProductCategory; label: string }[] = [
-  { value: "lab-series", label: "Lab Series — E-Liquids" },
-  { value: "gear-lab", label: "Gear Lab — Devices" },
-  { value: "component-lab", label: "Component Lab — Essentials & Mods" },
-];
-
 export default function ProductForm({ product, isNew = false }: ProductFormProps) {
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    fetch("/api/categories")
+      .then((r) => r.json())
+      .then((data: Category[]) => setCategories(data))
+      .catch(() => {});
+  }, []);
 
   const [form, setForm] = useState({
     name: product?.name ?? "",
     description: product?.description ?? "",
     price: product ? (product.price / 100).toFixed(2) : "",
-    category: product?.category ?? ("lab-series" as ProductCategory),
+    category: product?.category ?? "",
     imageUrl: product?.imageUrl ?? "",
     inStock: product?.inStock ?? true,
     featured: product?.featured ?? false,
@@ -151,11 +153,11 @@ export default function ProductForm({ product, isNew = false }: ProductFormProps
           <Label>Category *</Label>
           <Select value={form.category} onValueChange={(v) => set("category", v)}>
             <SelectTrigger>
-              <SelectValue />
+              <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
-              {CATEGORIES.map((c) => (
-                <SelectItem key={c.value} value={c.value}>
+              {categories.map((c) => (
+                <SelectItem key={c.id} value={c.slug}>
                   {c.label}
                 </SelectItem>
               ))}

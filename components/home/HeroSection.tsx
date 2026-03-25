@@ -1,6 +1,7 @@
 "use client";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { useRef, MouseEvent } from "react";
 
 const fadeUp = {
@@ -47,7 +48,13 @@ function MagneticButton({ children, className, href }: { children: React.ReactNo
   );
 }
 
-export default function HeroSection() {
+export default function HeroSection({
+  heroProduct,
+  logoUrl,
+}: {
+  heroProduct?: { name: string; imageUrl: string };
+  logoUrl?: string;
+}) {
   return (
     <section className="relative bg-[#f8f7f5] pt-16 overflow-hidden">
 
@@ -150,6 +157,14 @@ export default function HeroSection() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           >
+            {/* Logo watermark */}
+            {logoUrl && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ opacity: 0.06 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={logoUrl} alt="" aria-hidden className="w-[280px] h-[280px] object-contain" />
+              </div>
+            )}
+
             {/* Main image frame */}
             <div className="relative w-full max-w-[480px]">
 
@@ -158,35 +173,56 @@ export default function HeroSection() {
                 className="relative rounded-3xl overflow-hidden shadow-2xl shadow-violet-100"
                 style={{ aspectRatio: "4/5" }}
               >
-                {/* Gradient placeholder — replace with real product image */}
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background: "linear-gradient(145deg, #ede9fe 0%, #ddd6fe 40%, #c4b5fd 100%)",
-                  }}
-                />
-                {/* Decorative inner content */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-                  <div
-                    className="w-24 h-24 rounded-2xl"
-                    style={{
-                      background: "linear-gradient(135deg, rgba(139,92,246,0.3) 0%, rgba(109,40,217,0.5) 100%)",
-                      backdropFilter: "blur(8px)",
-                    }}
-                  />
-                  <p className="text-violet-500 text-xs font-semibold tracking-widest uppercase">Featured Products</p>
-                  <p className="text-violet-700/60 text-[10px] text-center px-8">
-                    Upload product photos via the admin dashboard
-                  </p>
-                </div>
-
-                {/* Bottom label overlay */}
-                <div className="absolute bottom-0 left-0 right-0 p-5"
-                  style={{ background: "linear-gradient(to top, rgba(255,255,255,0.9), transparent)" }}
-                >
-                  <p className="text-[#1c1c1e] font-semibold text-sm">Premium Collection</p>
-                  <p className="text-gray-400 text-xs mt-0.5">E-Liquids · Devices · Accessories</p>
-                </div>
+                {heroProduct ? (
+                  <>
+                    <Image
+                      src={heroProduct.imageUrl}
+                      alt={heroProduct.name}
+                      fill
+                      className="object-cover"
+                      priority
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
+                    {/* Bottom label overlay */}
+                    <div className="absolute bottom-0 left-0 right-0 p-5"
+                      style={{ background: "linear-gradient(to top, rgba(255,255,255,0.9), transparent)" }}
+                    >
+                      <p className="text-[#1c1c1e] font-semibold text-sm">{heroProduct.name}</p>
+                      <p className="text-gray-400 text-xs mt-0.5">Featured Product</p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {/* Gradient placeholder */}
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background: "linear-gradient(145deg, #ede9fe 0%, #ddd6fe 40%, #c4b5fd 100%)",
+                      }}
+                    />
+                    {/* Decorative inner content */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                      <div
+                        className="w-24 h-24 rounded-2xl"
+                        style={{
+                          background: "linear-gradient(135deg, rgba(139,92,246,0.3) 0%, rgba(109,40,217,0.5) 100%)",
+                          backdropFilter: "blur(8px)",
+                        }}
+                      />
+                      <p className="text-violet-500 text-xs font-semibold tracking-widest uppercase">Featured Products</p>
+                      <p className="text-violet-700/60 text-[10px] text-center px-8">
+                        Upload product photos via the admin dashboard
+                      </p>
+                    </div>
+                    {/* Bottom label overlay */}
+                    <div className="absolute bottom-0 left-0 right-0 p-5"
+                      style={{ background: "linear-gradient(to top, rgba(255,255,255,0.9), transparent)" }}
+                    >
+                      <p className="text-[#1c1c1e] font-semibold text-sm">Premium Collection</p>
+                      <p className="text-gray-400 text-xs mt-0.5">E-Liquids · Devices · Accessories</p>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Floating badge — top right */}
