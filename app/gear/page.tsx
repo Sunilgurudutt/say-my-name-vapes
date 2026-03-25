@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { getProducts } from "@/lib/data";
 import ProductGrid from "@/components/products/ProductGrid";
 
-export const metadata: Metadata = { title: "Devices" };
+export const metadata: Metadata = {
+  title: "Devices",
+  description: "Shop vape devices, kits, and hardware at Say My Name Vapes. Top devices from Elfbar, Level X, Zpods, and more. Find your perfect device in store.",
+  alternates: { canonical: "/gear" },
+};
 export const revalidate = 60;
 
 export default async function GearPage() {

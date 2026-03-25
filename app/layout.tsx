@@ -20,17 +20,30 @@ const playfair = Playfair_Display({
   weight: ["400", "500", "600", "700", "800"],
 });
 
+const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://say-my-name-vapes.vercel.app";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(BASE),
   title: {
     default: "Say My Name Vapes",
     template: "%s | Say My Name Vapes",
   },
   description:
-    "Say My Name Vapes — Premium e-liquids, devices, and accessories. Visit us in store.",
+    "Say My Name Vapes — Premium e-liquids, devices, and accessories. Browse top brands including Elfbar, Flavour Beast, Level X, and Zpods. Visit us in store.",
   openGraph: {
     title: "Say My Name Vapes",
-    description: "Premium vaping — e-liquids, devices, and accessories.",
+    description: "Premium vaping — e-liquids, devices, and accessories. Top brands, great prices.",
     type: "website",
+    url: BASE,
+    images: [{ url: "/images/og-image.jpg", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Say My Name Vapes",
+    description: "Premium vaping — e-liquids, devices, and accessories.",
+  },
+  alternates: {
+    canonical: BASE,
   },
 };
 

@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { getProducts } from "@/lib/data";
 import ProductGrid from "@/components/products/ProductGrid";
 
-export const metadata: Metadata = { title: "E-Liquids" };
+export const metadata: Metadata = {
+  title: "E-Liquids",
+  description: "Explore our premium e-liquid collection at Say My Name Vapes. Flavours from Flavour Beast, Naked, Coastal Clouds, and more. Find your next all-day vape.",
+  alternates: { canonical: "/lab-series" },
+};
 export const revalidate = 60;
 
 export default async function LabSeriesPage() {

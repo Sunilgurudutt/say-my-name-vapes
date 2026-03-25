@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 
-export const metadata: Metadata = { title: "About" };
+export const metadata: Metadata = {
+  title: "About",
+  description: "Say My Name Vapes is your local vape shop for premium e-liquids, devices, and accessories. Learn about our store and what we offer.",
+  alternates: { canonical: "/about" },
+};
 
 export default function AboutPage() {
   return (

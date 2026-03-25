@@ -3,7 +3,11 @@ import type { Metadata } from "next";
 import { getProducts } from "@/lib/data";
 import ProductsClient from "@/components/products/ProductsClient";
 
-export const metadata: Metadata = { title: "Discover" };
+export const metadata: Metadata = {
+  title: "Discover",
+  description: "Browse our full range of vapes, e-liquids, pods, and accessories. All top brands in one place — Elfbar, Flavour Beast, Level X, Zpods, and more.",
+  alternates: { canonical: "/discover" },
+};
 export const revalidate = 60;
 
 export default async function DiscoverPage() {
