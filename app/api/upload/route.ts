@@ -8,13 +8,18 @@ export async function POST(req: NextRequest) {
 
   // If Vercel Blob is configured, use it
   if (process.env.BLOB_READ_WRITE_TOKEN) {
-    const { put } = await import("@vercel/blob");
-    const formData = await req.formData();
-    const file = formData.get("file") as File;
-    if (!file) return Response.json({ error: "No file" }, { status: 400 });
+    try {
+      const { put } = await import("@vercel/blob");
+      const formData = await req.formData();
+      const file = formData.get("file") as File;
+      if (!file) return Response.json({ error: "No file" }, { status: 400 });
 
-    const blob = await put(file.name, file, { access: "public" });
-    return Response.json({ url: blob.url });
+      const blob = await put(file.name, file, { access: "public" });
+      return Response.json({ url: blob.url });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      return Response.json({ error: message }, { status: 500 });
+    }
   }
 
   // Dev fallback — save to /public/uploads/
