@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
 
 const SESSION_COOKIE = "smn_admin_session";
-const SESSION_VALUE = "authenticated";
+const SESSION_VALUE = "smn_v2";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
 export async function login(password: string): Promise<boolean> {

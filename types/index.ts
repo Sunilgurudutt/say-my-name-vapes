@@ -1,5 +1,12 @@
 export type ProductCategory = string;
 
+export interface HeroSlide {
+  id: string;
+  imageUrl: string;
+  label: string;
+  order: number;
+}
+
 export interface Category {
   id: string;
   label: string;

@@ -12,6 +12,7 @@ const NAV = [
   { href: "/admin/reviews", label: "Reviews", icon: "⭐", exact: false },
   { href: "/admin/categories", label: "Categories", icon: "🗂️", exact: false },
   { href: "/admin/store", label: "Store Info", icon: "🏪", exact: false },
+  { href: "/admin/hero", label: "Hero Slides", icon: "🖼️", exact: false },
 ];
 
 export default function AdminSidebar() {

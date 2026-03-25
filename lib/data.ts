@@ -4,7 +4,7 @@
  * and the Redis client will be used instead.
  */
 import { Redis } from "@upstash/redis";
-import type { Product, Offer, StoreInfo, Review, Category } from "@/types";
+import type { Product, Offer, StoreInfo, Review, Category, HeroSlide } from "@/types";
 import { seedProducts, seedOffers, seedStoreInfo, seedReviews } from "./seeds";
 
 // ── Client ────────────────────────────────────────────────────
@@ -195,4 +195,34 @@ export async function getStoreInfo(): Promise<StoreInfo> {
 
 export async function saveStoreInfo(info: StoreInfo): Promise<void> {
   await kvSet("store", info);
+}
+
+// ── Hero Slides ───────────────────────────────────────────────
+const defaultHeroSlides: HeroSlide[] = [
+  { id: "hero-1", imageUrl: "/images/hero/hero-1.jpg", label: "Top Brands In Store", order: 1 },
+  { id: "hero-2", imageUrl: "/images/hero/hero-2.jpg", label: "Disposables & Devices", order: 2 },
+  { id: "hero-3", imageUrl: "/images/hero/hero-3.jpg", label: "Premium E-Liquids", order: 3 },
+  { id: "hero-4", imageUrl: "/images/hero/hero-4.jpg", label: "Pods & Accessories", order: 4 },
+  { id: "hero-5", imageUrl: "/images/hero/hero-5.jpg", label: "Flavours & More", order: 5 },
+];
+
+export async function getHeroSlides(): Promise<HeroSlide[]> {
+  const slides = await kvGet<HeroSlide[]>("hero_slides", defaultHeroSlides);
+  return slides.sort((a, b) => a.order - b.order);
+}
+
+export async function saveHeroSlide(slide: HeroSlide): Promise<void> {
+  const slides = await getHeroSlides();
+  const idx = slides.findIndex((s) => s.id === slide.id);
+  if (idx >= 0) {
+    slides[idx] = slide;
+  } else {
+    slides.push(slide);
+  }
+  await kvSet("hero_slides", slides);
+}
+
+export async function deleteHeroSlide(id: string): Promise<void> {
+  const slides = await getHeroSlides();
+  await kvSet("hero_slides", slides.filter((s) => s.id !== id));
 }
