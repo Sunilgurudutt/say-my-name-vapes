@@ -8,7 +8,7 @@ export default function GlobalShaderBackground() {
   return (
     <ShaderBackground
       className="fixed inset-0 w-full h-full pointer-events-none"
-      style={{ zIndex: -1, opacity: 0.35 }}
+      style={{ zIndex: 1, opacity: 0.18, mixBlendMode: "multiply" }}
     />
   );
 }

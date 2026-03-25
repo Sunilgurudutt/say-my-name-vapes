@@ -56,12 +56,12 @@ export default function ProductForm({ product, isNew = false }: ProductFormProps
       const fd = new FormData();
       fd.append("file", file);
       const res = await fetch("/api/upload", { method: "POST", body: fd });
-      if (!res.ok) throw new Error("Upload failed");
-      const { url } = await res.json();
-      set("imageUrl", url);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Upload failed");
+      set("imageUrl", data.url);
       toast.success("Image uploaded.");
-    } catch {
-      toast.error("Image upload failed.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Image upload failed.");
     } finally {
       setUploading(false);
     }

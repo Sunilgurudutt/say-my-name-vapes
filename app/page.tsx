@@ -18,10 +18,10 @@ export default async function HomePage() {
   return (
     <>
       <HeroSection />
-      <CategoryCards />
       <OffersStrip offers={activeOffers} />
-      <ReviewsStrip />
       <FeaturedProducts products={featured} />
+      <CategoryCards />
+      <ReviewsStrip />
       <StoreMapSection store={store} />
     </>
   );
