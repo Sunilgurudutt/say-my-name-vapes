@@ -1,142 +1,91 @@
-# Say My Name Vapes
+# Say My Name Vapes — Business Showcase Website
 
-A modern, full-stack showcase website for a local Canadian vape shop. Built with Next.js 16 App Router — features a clean storefront for customers and a private admin dashboard for the owner to manage all content without touching code.
+> A full-stack showcase website built for a real local vape shop. The store owner can manage products, offers, and store info through a custom admin dashboard — zero technical knowledge required.
+
+**Live:** _coming soon_
+
+---
+
+## Overview
+
+The client needed a professional web presence with the ability to keep their catalog up to date independently — no calling a developer every time a price changes. I built a complete solution: a polished storefront and a self-service admin panel, deployed and handed off with one password.
 
 ---
 
 ## Features
 
-### Storefront
-- Product catalogue with category filtering (Devices, E-Liquids, Components, Accessories)
-- Active offers & promotions strip
-- Customer reviews section
-- Store info — address, hours, Google Maps embed
-- Age gate on entry
-- Fully responsive
-
-### Admin Dashboard (`/admin`)
-- Password-protected — owner login only
-- Add, edit, delete products with image upload
-- Manage offers with expiry dates and badges
-- Manage customer reviews
-- Update store info, hours, and social links
+- **Storefront** — Hero section, featured products, active offers, store info, embedded Google Maps
+- **Product catalog** — Category filtering, clean card grid, image support
+- **Admin dashboard** — Full CRUD for products, offers, and store details behind a password
+- **Image uploads** — Drag & drop or paste a URL directly in the admin panel
+- **SEO ready** — Sitemap, robots.txt, Open Graph tags, GEO-optimized content for local search
+- **Fully responsive** — Mobile, tablet, and desktop
 
 ---
 
 ## Tech Stack
 
-| Layer | Tech |
-|-------|------|
-| Framework | Next.js 16 (App Router, TypeScript) |
-| Styling | Tailwind CSS v4 + custom utilities |
-| UI Components | Shadcn/ui |
-| Animations | Framer Motion |
-| Auth | Custom bcrypt + httpOnly cookies (Server Actions) |
-| Database | Upstash Redis (falls back to local JSON in dev) |
-| Image Storage | Vercel Blob (falls back to `/public/uploads` in dev) |
-| Deployment | Vercel |
+| | |
+|---|---|
+| **Framework** | Next.js 15 (App Router) + TypeScript |
+| **Styling** | Tailwind CSS v4 + Framer Motion |
+| **Components** | shadcn/ui |
+| **Database** | Upstash Redis |
+| **Image Storage** | Vercel Blob |
+| **Auth** | Custom bcrypt + httpOnly cookies |
+| **Hosting** | Vercel |
+
+No third-party auth libraries. Auth is a single Server Action — bcrypt hash comparison, httpOnly cookie, done.
 
 ---
 
-## Getting Started
+## Architecture Highlights
 
-### Prerequisites
-- Node.js 18+
-- npm
+**Dev/prod parity without complexity**
+In development the app falls back to local JSON files and `/public/uploads` — no database setup needed to run locally. In production it switches to Upstash Redis and Vercel Blob automatically via environment variables.
 
-### Install & Run
+**Self-contained auth**
+No NextAuth, no Passport, no sessions table. A bcrypt hash in an env var, one server action, one httpOnly cookie. Simple, secure, zero dependencies.
+
+**Owner-first admin UX**
+The admin panel was designed for someone who has never used a CMS. Every action has one button. Image upload works by pasting a product photo URL or dragging a file in.
+
+---
+
+## Running Locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+Runs at `http://localhost:3000` — no database setup needed.
+Admin at `http://localhost:3000/admin` (dev password: `admin`)
 
-Admin panel: [http://localhost:3000/admin](http://localhost:3000/admin)
-Default dev password: `admin`
+---
 
-### Environment Variables
+## Deployment
 
-Create a `.env.local` file in the root:
+Deployed on Vercel. Services connected:
+
+- **Upstash Redis** — all dynamic data (products, offers, store info)
+- **Vercel Blob** (Public) — product images
+
+Environment variables required:
 
 ```env
-# Admin Auth
-# Dev fallback — default password is "admin"
-ADMIN_PASSWORD=admin
-
-# Production — generate with:
-# node -e "require('bcryptjs').hash('yourpassword',10).then(console.log)"
-ADMIN_PASSWORD_HASH=
-
-# Upstash Redis (optional — uses local JSON files if not set)
 UPSTASH_REDIS_REST_URL=
 UPSTASH_REDIS_REST_TOKEN=
-
-# Vercel Blob (optional — saves to /public/uploads if not set)
 BLOB_READ_WRITE_TOKEN=
-
-# Next.js
-NEXTAUTH_SECRET=your-random-secret-here
-NEXTAUTH_URL=http://localhost:3000
+ADMIN_PASSWORD_HASH=
 ```
 
 ---
 
-## Project Structure
+## Design
 
-```
-├── app/
-│   ├── page.tsx              # Homepage
-│   ├── gear/                 # Devices & hardware
-│   ├── discover/             # E-liquids
-│   ├── lab-series/           # Components
-│   ├── about/                # About the store
-│   ├── contact/              # Contact page
-│   ├── admin/                # Owner dashboard (protected)
-│   └── api/                  # REST API routes
-├── components/
-│   ├── home/                 # Homepage sections
-│   ├── products/             # Product grid & filters
-│   ├── admin/                # Admin forms & tables
-│   ├── layout/               # Navbar, footer, sidebar
-│   └── ui/                   # Shared UI components
-├── lib/
-│   ├── data.ts               # Data access layer (Redis / local JSON)
-│   ├── auth.ts               # Session auth
-│   └── seeds.ts              # Default placeholder content
-└── types/
-    └── index.ts              # TypeScript interfaces
-```
+Dark navy base (`#050a18`) with neon teal (`#2dd4bf`) and cyan (`#22d3ee`) accents. Clean, premium retail feel — built to look like money without spending any on a designer.
 
 ---
 
-## Deployment (Vercel)
-
-1. Push to GitHub
-2. Import project on [vercel.com](https://vercel.com)
-3. Add environment variables:
-   - `ADMIN_PASSWORD_HASH` — bcrypt hash of owner's password
-   - `NEXTAUTH_SECRET` — random 32-char string
-   - `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` — from [upstash.com](https://upstash.com)
-   - `BLOB_READ_WRITE_TOKEN` — from Vercel Blob storage
-4. Deploy
-
----
-
-## Owner Guide
-
-| Task | Where |
-|------|-------|
-| Add / edit products | `/admin/products` |
-| Add / edit offers | `/admin/offers` |
-| Manage reviews | `/admin/reviews` |
-| Update store info & hours | `/admin/store` |
-
-To get your Google Maps embed URL: Google Maps → Share → **Embed a map** → copy only the `src="..."` value.
-
----
-
-## License
-
-Private — built for Say My Name Vapes. All rights reserved.
+*Built by [Dheeraj](https://github.com/kdheerajsai401-prog)*
