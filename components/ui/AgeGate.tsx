@@ -49,7 +49,7 @@ export default function AgeGate({ logoUrl }: { logoUrl: string }) {
           <>
             <h2 className="font-display text-[#1c1c1e] text-2xl font-bold mb-2">Age Verification</h2>
             <p className="text-gray-500 text-sm leading-relaxed mb-8">
-              You must be <strong>18 years or older</strong> to enter this site.<br />
+              You must be <strong>19 years or older</strong> to enter this site.<br />
               Vaping products are for adults only.
             </p>
             <div className="flex flex-col gap-3 w-full">
@@ -57,13 +57,13 @@ export default function AgeGate({ logoUrl }: { logoUrl: string }) {
                 onClick={handleConfirm}
                 className="w-full py-3.5 bg-violet-600 hover:bg-violet-700 text-white font-semibold rounded-xl transition-all duration-200 text-sm hover:shadow-lg hover:shadow-violet-200"
               >
-                I am 18 or over — Enter
+                I am 19 or over — Enter
               </button>
               <button
                 onClick={handleDeny}
                 className="w-full py-3.5 bg-gray-100 hover:bg-gray-200 text-gray-600 font-medium rounded-xl transition-all duration-200 text-sm"
               >
-                I am under 18
+                I am under 19
               </button>
             </div>
             <p className="text-gray-400 text-[11px] mt-5">
@@ -77,7 +77,7 @@ export default function AgeGate({ logoUrl }: { logoUrl: string }) {
             </div>
             <h2 className="font-display text-[#1c1c1e] text-xl font-bold mb-2">Access Restricted</h2>
             <p className="text-gray-500 text-sm leading-relaxed">
-              Sorry, you must be 18 or older to visit this site. This website is intended for adults only.
+              Sorry, you must be 19 or older to visit this site. This website is intended for adults only.
             </p>
           </>
         )}

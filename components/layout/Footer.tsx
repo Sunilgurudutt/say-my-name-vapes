@@ -99,7 +99,7 @@ export default function Footer({ logoUrl }: { logoUrl: string }) {
             © {new Date().getFullYear()} Say My Name Vapes. All rights reserved.
           </p>
           <p className="text-gray-600 text-xs text-center">
-            18+ only. Vaping products are for adult smokers only.
+            19+ only. Vaping products are for adult smokers only.
           </p>
         </div>
       </div>
